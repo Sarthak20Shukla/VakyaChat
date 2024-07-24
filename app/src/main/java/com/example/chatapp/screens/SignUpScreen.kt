@@ -30,16 +30,17 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.chatapp.CheckSignedIn
+import com.example.chatapp.CommonProgressBar
 import com.example.chatapp.DestinationScreens
 import com.example.chatapp.LCViewModel
 import com.example.chatapp.R
 import com.example.chatapp.navigateTo
 
 @OptIn(ExperimentalMaterial3Api::class)
-@Preview
 @Composable
 fun SignUpScreen(navController: NavController,vm: LCViewModel){
-
+    CheckSignedIn(vm = vm, navController = navController)
     Box(modifier=Modifier.fillMaxSize()){
         Column(modifier= Modifier
             .fillMaxSize()
@@ -99,18 +100,29 @@ fun SignUpScreen(navController: NavController,vm: LCViewModel){
                 modifier=Modifier.padding(8.dp)
             )
             
-            Button(onClick = { /*TODO*/ }, modifier=Modifier.padding(8.dp),) {
+            Button(onClick = {
+                             vm.signUp(
+                                 nameState.value.text,
+                                 numberState.value.text,
+                                 emailState.value.text,
+                                 passwordState.value.text
+                             )
+            }, modifier=Modifier.padding(8.dp)) {
                 Text(text = "SIGN UP")
                 
             }
             Text(text = "Already have an account ?? Go to Login",
                 color= Color.Blue,
-                modifier = Modifier.padding(8.dp)
+                modifier = Modifier
+                    .padding(8.dp)
                     .clickable {
-                        navigateTo(navController,DestinationScreens.Login.route)
+                        navigateTo(navController, DestinationScreens.Login.route)
                     }
             )
         }
     }
+    /*if(vm.inProcess.value){
+        CommonProgressBar()
+    }*/
 
 }
