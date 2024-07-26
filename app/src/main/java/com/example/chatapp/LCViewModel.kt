@@ -38,19 +38,24 @@ class LCViewModel @Inject constructor(
         }
         inProcess.value=true
         db.collection(USER_NODE).whereEqualTo("number",number).get().addOnSuccessListener {
+            if(it.isEmpty){
+                auth.createUserWithEmailAndPassword(email,password)
+                    .addOnCompleteListener {
 
-        }
-        auth.createUserWithEmailAndPassword(email,password)
-            .addOnCompleteListener {
-
-        if(it.isSuccessful){
-            signin.value=true
-            createOrUpdateProfile(name,number)
+                        if(it.isSuccessful){
+                            signin.value=true
+                            createOrUpdateProfile(name,number)
+                        }
+                        else{
+                            handleException(it.exception, customMessage = "Sign up failed")
+                        }
                     }
-        else{
-            handleException(it.exception, customMessage = "Sign up failed")
+            } else {
+                handleException(customMessage = "Number already exist")
+                inProcess.value=false
+            }
         }
-    }
+
 
     }
 
