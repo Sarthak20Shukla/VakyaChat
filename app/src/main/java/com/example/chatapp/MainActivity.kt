@@ -59,7 +59,7 @@ class MainActivity : ComponentActivity() {
 
             }
             composable(DestinationScreens.Login.route){
-                 LoginScreen(navController)
+                 LoginScreen(navController=navController, vm=vm)
 
             }
             composable(DestinationScreens.ChatList.route){

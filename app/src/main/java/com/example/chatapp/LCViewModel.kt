@@ -58,7 +58,9 @@ class LCViewModel @Inject constructor(
 
 
     }
+    fun logIn( email:String,password: String){
 
+    }
      fun createOrUpdateProfile(name: String?=null , number: String?=null,imageurl:String?=null) {
          var uid =auth.currentUser?.uid
          val userData=UserData(
