@@ -21,6 +21,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
@@ -40,6 +41,7 @@ import com.example.chatapp.navigateTo
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SignUpScreen(navController: NavController,vm: LCViewModel){
+    val context= LocalContext.current
     CheckSignedIn(vm = vm, navController = navController)
     Box(modifier=Modifier.fillMaxSize()){
         Column(modifier= Modifier
@@ -102,10 +104,11 @@ fun SignUpScreen(navController: NavController,vm: LCViewModel){
             
             Button(onClick = {
                              vm.signUp(
-                                 nameState.value.text,
-                                 numberState.value.text,
-                                 emailState.value.text,
-                                 passwordState.value.text
+                                name = nameState.value.text,
+                                number=  numberState.value.text,
+                                 email = emailState.value.text,
+                                password = passwordState.value.text,
+                                 context = context
                              )
             }, modifier=Modifier.padding(8.dp)) {
                 Text(text = "SIGN UP")
