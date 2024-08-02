@@ -27,6 +27,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -38,6 +39,7 @@ import com.example.chatapp.TitleText
 @Composable
 fun ChatListScreen(navController: NavController, vm: LCViewModel) {
     val inProgress = vm.inProcessChat
+    val context= LocalContext.current
     if (inProgress.value) {
         /*Column(
             modifier = Modifier
@@ -64,7 +66,7 @@ fun ChatListScreen(navController: NavController, vm: LCViewModel) {
         val onFabclick: () -> Unit = { showDialog.value = true }
         val onDismiss: () -> Unit = { showDialog.value = false }
         val onAddChat: (String) -> Unit = {
-            vm.onAddChat(it)
+            vm.onAddChat(it,context)
             showDialog.value = false
         }
         Scaffold(
@@ -141,15 +143,17 @@ fun FAB(
             }
 
         )
-        FloatingActionButton(
-            onClick = { onFabClick },
-            containerColor = MaterialTheme.colorScheme.secondary,
-            shape = CircleShape,
-            modifier = Modifier.padding(bottom = 40.dp)
-        ) {
-            Icon(imageVector = Icons.Rounded.Add, contentDescription = null, tint = Color.White)
-        }
+
 
     }
+    FloatingActionButton(
+        onClick = { onFabClick.invoke() },
+        containerColor = MaterialTheme.colorScheme.secondary,
+        shape = CircleShape,
+        modifier = Modifier.padding(bottom = 40.dp)
+    ) {
+        Icon(imageVector = Icons.Rounded.Add, contentDescription = null, tint = Color.White)
+    }
+
 
 }

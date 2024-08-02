@@ -104,7 +104,7 @@ class LCViewModel @Inject constructor(
 
                     } else {
                         handleException(it.exception, customMessage = "Sign in Failed!!!")
-                        Toast.makeText(context,"Credentials not correct!!!",Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context,"Sign in Failed!!!",Toast.LENGTH_SHORT).show()
 
                     }
                 }
@@ -194,7 +194,7 @@ uid?.let {
 
     }
 
-    fun onAddChat(number: String) {
+    fun onAddChat(number: String,context: Context) {
         if(number.isEmpty() or !number.isDigitsOnly()){
             handleException(customMessage = "Number must contain digits only")
         }
@@ -217,6 +217,8 @@ uid?.let {
                     db.collection(USER_NODE).whereEqualTo("number",number).get().addOnSuccessListener {
                         if (it.isEmpty){
                             handleException(customMessage = "Number not found")
+                            Toast.makeText(context,"Number not found!!",Toast.LENGTH_SHORT).show()
+
 
                         }
                         else {
@@ -240,6 +242,8 @@ uid?.let {
                     }
                 } else {
                     handleException(customMessage = "Chats already exist")
+                    Toast.makeText(context,"Chats already exist",Toast.LENGTH_SHORT).show()
+
                 }
             }
         }
