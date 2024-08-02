@@ -47,6 +47,7 @@ import com.example.chatapp.navigateTo
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProfileScreen(navController: NavController,vm: LCViewModel) {
+    val context= LocalContext.current
 
     val notification = rememberSaveable { mutableStateOf("") }
     if (notification.value.isNotEmpty()) {
@@ -160,6 +161,8 @@ fun ProfileScreen(navController: NavController,vm: LCViewModel) {
         Button(onClick = {
                          vm.logout()
             navigateTo(navController=navController, route = DestinationScreens.Login.route)
+            Toast.makeText(context,"Logged out successfully",Toast.LENGTH_SHORT).show()
+
             // Sign out the user and disconnect the account
         }, modifier = Modifier
             .align(alignment = Alignment.CenterHorizontally)
