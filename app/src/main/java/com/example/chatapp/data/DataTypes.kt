@@ -12,3 +12,16 @@ data class UserData(
         "imageUrl" to imageUrl
     )
 }
+data class  ChatData(
+    val chatId:String?="",
+    val user1:ChatUser= ChatUser(),
+    val user2:ChatUser=ChatUser(),
+
+    )
+data class ChatUser(
+    var userId: String?="",
+    var name: String?="",
+    var imageUrl: Any? ="",
+    var number: String?="",
+
+    )

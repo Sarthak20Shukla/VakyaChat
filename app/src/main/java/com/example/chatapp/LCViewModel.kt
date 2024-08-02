@@ -6,13 +6,19 @@ import android.net.Uri
 import android.util.Log
 import android.widget.Toast
 import androidx.compose.runtime.mutableStateOf
+import androidx.core.text.isDigitsOnly
 import androidx.lifecycle.ViewModel
+import com.example.chatapp.data.CHATS
+import com.example.chatapp.data.ChatData
+import com.example.chatapp.data.ChatUser
 import com.example.chatapp.data.Events
 import com.example.chatapp.data.USER_NODE
 import com.example.chatapp.data.UserData
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.Filter
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.toObject
+import com.google.firebase.firestore.toObjects
 import com.google.firebase.storage.FirebaseStorage
 import dagger.hilt.android.lifecycle.HiltViewModel
 import java.util.UUID
@@ -26,9 +32,12 @@ class LCViewModel @Inject constructor(
 ) :ViewModel() {
 
     var inProcess= mutableStateOf(false)
+    var inProcessChat= mutableStateOf(false)
     val eventMutableState = mutableStateOf<Events<String>?>(null)
     var signin= mutableStateOf(false)
     val userData = mutableStateOf<UserData?>(null)
+    val chats = mutableStateOf<List<ChatData>>(listOf())
+
     init {
          val currentUser = auth.currentUser
           signin.value=currentUser!=null
@@ -182,6 +191,58 @@ uid?.let {
         userData.value=null
         eventMutableState.value= Events("Logged out")
 
+
+    }
+
+    fun onAddChat(number: String) {
+        if(number.isEmpty() or !number.isDigitsOnly()){
+            handleException(customMessage = "Number must contain digits only")
+        }
+        else {
+            db.collection(CHATS).where(Filter.or(
+                Filter.and(
+                    Filter.equalTo("user1.number",number),
+                    Filter.equalTo("user2.number",userData.value?.number),
+
+
+                    ), Filter.and(
+                    Filter.equalTo("user2.number",userData.value?.number),
+
+                    Filter.equalTo("user1.number",number),
+
+
+                    )
+            )).get().addOnSuccessListener {
+                if (it.isEmpty){
+                    db.collection(USER_NODE).whereEqualTo("number",number).get().addOnSuccessListener {
+                        if (it.isEmpty){
+                            handleException(customMessage = "Number not found")
+
+                        }
+                        else {
+                            val chatPartner=it.toObjects<UserData>()[0]
+                            val id=db.collection(CHATS).document().id
+                            val chat=ChatData(
+                                chatId = id,
+                                ChatUser(userData.value?.userId,
+                                    userData.value?.name,
+                                    userData.value?.imageUrl,
+                                    userData.value?.number),
+                                ChatUser(chatPartner.userId,
+                                    chatPartner.name,
+                                    chatPartner.imageUrl,
+                                    chatPartner.number)
+                            )
+                            db.collection(CHATS).document(id).set(chat)
+                        }
+                    }.addOnFailureListener {
+                        handleException(it)
+                    }
+                } else {
+                    handleException(customMessage = "Chats already exist")
+                }
+            }
+        }
 
     }
 }

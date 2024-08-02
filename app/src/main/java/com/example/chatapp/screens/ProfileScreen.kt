@@ -161,7 +161,7 @@ fun ProfileScreen(navController: NavController,vm: LCViewModel) {
         Button(onClick = {
                          vm.logout()
             navigateTo(navController=navController, route = DestinationScreens.Login.route)
-            Toast.makeText(context,"Logged out successfully",Toast.LENGTH_SHORT).show()
+            Toast.makeText(context,"Log out successfully",Toast.LENGTH_SHORT).show()
 
             // Sign out the user and disconnect the account
         }, modifier = Modifier
