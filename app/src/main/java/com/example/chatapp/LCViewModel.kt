@@ -175,4 +175,13 @@ uid?.let {
              }
 
     }
+
+    fun logout() {
+        auth.signOut()
+        signin.value=false
+        userData.value=null
+        eventMutableState.value= Events("Logged out")
+
+
+    }
 }

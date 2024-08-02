@@ -158,8 +158,9 @@ fun ProfileScreen(navController: NavController,vm: LCViewModel) {
         }
         
         Button(onClick = {
+                         vm.logout()
+            navigateTo(navController=navController, route = DestinationScreens.Login.route)
             // Sign out the user and disconnect the account
-            navigateTo(navController, DestinationScreens.Login.route)
         }, modifier = Modifier
             .align(alignment = Alignment.CenterHorizontally)
             .padding(top = 50.dp, bottom = 303.dp)) {
