@@ -88,7 +88,7 @@ fun ChatListScreen(navController: NavController, vm: LCViewModel) {
                 Column(modifier = Modifier
                     .fillMaxSize()
                     .padding(it)) {
-                    TitleText(txt = "Chats")
+                    TitleText(txt = "VakyaChat")
                     if(chats.isEmpty()){
                         Column(
                            modifier= Modifier
