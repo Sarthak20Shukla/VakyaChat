@@ -12,15 +12,19 @@ import com.example.chatapp.data.CHATS
 import com.example.chatapp.data.ChatData
 import com.example.chatapp.data.ChatUser
 import com.example.chatapp.data.Events
+import com.example.chatapp.data.MESSAGE
+import com.example.chatapp.data.Message
 import com.example.chatapp.data.USER_NODE
 import com.example.chatapp.data.UserData
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.Filter
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.firestore.toObject
 import com.google.firebase.firestore.toObjects
 import com.google.firebase.storage.FirebaseStorage
 import dagger.hilt.android.lifecycle.HiltViewModel
+import java.util.Calendar
 import java.util.UUID
 import javax.inject.Inject
 
@@ -37,6 +41,9 @@ class LCViewModel @Inject constructor(
     var signin= mutableStateOf(false)
     val userData = mutableStateOf<UserData?>(null)
     val chats = mutableStateOf<List<ChatData>>(listOf())
+    val chatMessages= mutableStateOf<List<Message>>(listOf())
+    val inProgressChatMessage= mutableStateOf(false)
+    var currentChatMessageListener : ListenerRegistration?=null
 
     init {
          val currentUser = auth.currentUser
@@ -45,7 +52,29 @@ class LCViewModel @Inject constructor(
               getUserData(it)
           }
     }
+    fun populateMessages(chatId: String){
+    inProgressChatMessage.value=true
+        currentChatMessageListener=db.collection(CHATS).document(chatId).collection(MESSAGE).addSnapshotListener {
+                value, error ->
+            if(error !=null){
+                handleException(error)
 
+            }
+            if(value!=null){
+                chatMessages.value=value.documents.mapNotNull {
+                    it.toObject<Message>()
+                } .sortedBy { it.timestamp }
+
+                inProgressChatMessage.value=false
+            }
+
+
+        }
+}
+    fun decopulateMessages(){
+        chatMessages.value= listOf()
+        currentChatMessageListener=null
+    }
     fun populatechats(){
         inProcessChat.value=true
         db.collection(CHATS).where(
@@ -65,6 +94,13 @@ class LCViewModel @Inject constructor(
             }
 
         }
+    }
+
+    fun onSendReply(chatId:String,message : String){
+        val time=Calendar.getInstance().time.toString()
+        val msg = Message(userData.value?.userId,message,time)
+        db.collection(CHATS).document(chatId).collection(MESSAGE).document().set(msg)
+
     }
 
     @SuppressLint("SuspiciousIndentation")

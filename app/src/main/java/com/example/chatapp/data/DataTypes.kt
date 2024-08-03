@@ -22,6 +22,13 @@ data class ChatUser(
     var userId: String?="",
     var name: String?="",
     var imageUrl: Any? ="",
-    var number: String?="",
+    var number: String?=""
 
     )
+
+data class Message(
+    var sendBy:String?="",
+    var message:String?="",
+    var timestamp:String?=""
+
+)
