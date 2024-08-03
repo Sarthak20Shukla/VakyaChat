@@ -169,13 +169,13 @@ class LCViewModel @Inject constructor(
     }
      fun createOrUpdateProfile(
          name: String?=null, number: String?=null,
-         imageurl: String? = null) {
+         imageUrl: String? = null) {
          var uid =auth.currentUser?.uid
          val userData=UserData(
              userId = uid,
              name =name?: userData.value?.name,
              number = number?:userData.value?.number,
-             imageUrl =imageurl?:userData.value?.imageUrl
+             imageUrl =imageUrl?:userData.value?.imageUrl
 
          )
 uid?.let {
@@ -221,7 +221,7 @@ uid?.let {
 
     fun uploadProfileImage(uri: Uri) {
         uploadImage(uri){
-            createOrUpdateProfile(imageurl = it.toString())
+            createOrUpdateProfile(imageUrl = it.toString())
 
         }
     }
@@ -247,6 +247,8 @@ uid?.let {
         auth.signOut()
         signin.value=false
         userData.value=null
+        decopulateMessages()
+        currentChatMessageListener = null
         eventMutableState.value= Events("Logged out")
 
 
