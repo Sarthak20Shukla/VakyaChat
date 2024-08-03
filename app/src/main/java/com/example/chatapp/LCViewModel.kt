@@ -46,6 +46,27 @@ class LCViewModel @Inject constructor(
           }
     }
 
+    fun populatechats(){
+        inProcessChat.value=true
+        db.collection(CHATS).where(
+            Filter.or(
+                Filter.equalTo("user1.userId",userData.value?.userId),
+                Filter.equalTo("user2.userId",userData.value?.userId),
+            )
+        ).addSnapshotListener { value, error ->
+            if(error !=null){
+                handleException(error)
+            }
+            if(value!=null){
+                chats.value=value.documents.mapNotNull {
+                    it.toObject<ChatData>()
+                }
+                inProcessChat.value=false
+            }
+
+        }
+    }
+
     @SuppressLint("SuspiciousIndentation")
     fun signUp(name:String, number : String, email:String, password:String, context: Context){
     inProcess.value=true
@@ -148,6 +169,7 @@ uid?.let {
                 var user=value.toObject<UserData>()
                 userData.value=user
                 inProcess.value=false
+                populatechats()
             }
         }
     }

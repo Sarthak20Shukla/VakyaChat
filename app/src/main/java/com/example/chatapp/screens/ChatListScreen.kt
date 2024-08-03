@@ -1,12 +1,13 @@
 package com.example.chatapp.screens
 
-import android.icu.text.CaseMap.Title
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
@@ -31,9 +32,11 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.example.chatapp.CommonProgressBar
+import com.example.chatapp.CommonRow
+import com.example.chatapp.DestinationScreens
 import com.example.chatapp.LCViewModel
 import com.example.chatapp.TitleText
+import com.example.chatapp.navigateTo
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -41,7 +44,7 @@ fun ChatListScreen(navController: NavController, vm: LCViewModel) {
     val inProgress = vm.inProcessChat
     val context= LocalContext.current
     if (inProgress.value) {
-        /*Column(
+       /* Column(
             modifier = Modifier
                 .padding(20.dp)
                 .fillMaxWidth()
@@ -57,7 +60,8 @@ fun ChatListScreen(navController: NavController, vm: LCViewModel) {
                 strokeWidth = 5.dp
             )
         }*/
-    } else {
+    }
+        else {
         val chats = vm.chats.value
         val userData = vm.userData.value
         val showDialog = remember {
@@ -95,6 +99,26 @@ fun ChatListScreen(navController: NavController, vm: LCViewModel) {
 
                         ) {
                             Text(text = "No Chats Available")
+                        }
+                    } else {
+                        LazyColumn(modifier = Modifier.weight(1f)){
+                            this.items(chats){
+                                chat->
+                                val chatUser =if(chat.user1.userId==userData?.userId){
+                                    chat.user2
+                                } else {
+                                    chat.user1
+                                }
+                                CommonRow(imageUrl = chatUser.imageUrl, name =chatUser.name ) {
+                                    chat.chatId?.let{
+                                        navigateTo(navController,DestinationScreens.SingleChat.createRoute(id= it))
+
+                                    }
+
+
+                                }
+                            }
+
                         }
                     }
 
