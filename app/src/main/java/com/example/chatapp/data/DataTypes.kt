@@ -32,3 +32,9 @@ data class Message(
     var timestamp:String?=""
 
 )
+data class Status(
+    var user:ChatUser=ChatUser(),
+    var imageUrl:String?="",
+    var timestamp:Long?=null
+
+)

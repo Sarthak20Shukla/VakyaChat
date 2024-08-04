@@ -80,12 +80,13 @@ class MainActivity : ComponentActivity() {
                 StatusScreen(navController=navController,vm=vm)
 
             }
-            composable(DestinationScreens.SingleStatus.route){
-                SingleStatusScreen(navController = navController, vm = vm)
 
-            }
             composable(DestinationScreens.Profile.route){
                 ProfileScreen(navController=navController,vm=vm)
+
+            }
+            composable(DestinationScreens.SingleStatus.route){
+                SingleStatusScreen(navController = navController, vm = vm)
 
             }
         }

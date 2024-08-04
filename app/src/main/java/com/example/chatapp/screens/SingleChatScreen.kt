@@ -1,5 +1,6 @@
 package com.example.chatapp.screens
 
+import android.graphics.Color.rgb
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -70,7 +71,7 @@ fun SingleChatScreen(navController: NavController, vm: LCViewModel, chatId: Stri
             vm.decopulateMessages()
         }
         MessageBox(
-            modifier = Modifier.weight(1f),
+            modifier = Modifier.weight(1f).background(Color(rgb(245,245,245))),
             chatMessages = chatMessages.value,
             currentUserId = myuser?.userId ?: ""
         )
@@ -86,10 +87,11 @@ fun MessageBox(modifier: Modifier, chatMessages: List<Message>, currentUserId: S
     LazyColumn(modifier = modifier) {
         items(chatMessages) { msg ->
             val alignment = if (msg.sendBy == currentUserId) Alignment.End else Alignment.Start
-            val color = if (msg.sendBy == currentUserId) Color.Green else Color.Gray
+            val color = if (msg.sendBy == currentUserId) Color.Cyan else Color.Magenta
 
 
             Column(
+
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(8.dp),

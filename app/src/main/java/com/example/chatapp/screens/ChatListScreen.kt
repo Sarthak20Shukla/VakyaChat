@@ -1,5 +1,7 @@
 package com.example.chatapp.screens
 
+import android.graphics.Color.rgb
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -87,7 +89,7 @@ fun ChatListScreen(navController: NavController, vm: LCViewModel) {
             content = {
                 Column(modifier = Modifier
                     .fillMaxSize()
-                    .padding(it)) {
+                    .padding(it).background(Color(rgb(248,248,248)))) {
                     TitleText(txt = "VakyaChat")
                     if(chats.isEmpty()){
                         Column(
