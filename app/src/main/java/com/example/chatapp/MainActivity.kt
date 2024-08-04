@@ -80,13 +80,21 @@ class MainActivity : ComponentActivity() {
                 StatusScreen(navController=navController,vm=vm)
 
             }
+            composable(DestinationScreens.SingleStatus.route){
+                val userId=it.arguments?.getString("userId")
+                userId?.let {
+                    SingleStatusScreen(
+                        navController = navController,
+                        vm = vm,
+                        userId = userId
+                    )
+                }
+            }
 
             composable(DestinationScreens.Profile.route){
                 ProfileScreen(navController=navController,vm=vm)
 
             }
-            composable(DestinationScreens.SingleStatus.route){
-                SingleStatusScreen(navController = navController, vm = vm)
 
             }
         }
@@ -94,5 +102,5 @@ class MainActivity : ComponentActivity() {
 
     }
 
-}
+
 

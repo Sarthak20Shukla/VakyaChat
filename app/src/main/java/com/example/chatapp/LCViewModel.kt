@@ -378,7 +378,7 @@ class LCViewModel @Inject constructor(
 
                     }
                 }
-                db.collection(STATUS).whereGreaterThan("timestamp",cutoff).whereIn("user.userId", currentConnections)
+                db.collection(STATUS).whereIn("user.userId", currentConnections)
                     .addSnapshotListener { value, error ->
 
                         if(error!=null){
