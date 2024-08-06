@@ -84,10 +84,12 @@ fun ProfileScreen(navController: NavController,vm: LCViewModel) {
 
 
         val painter = rememberAsyncImagePainter(
-            if (imageUrl.value.isEmpty())
-                R.drawable.user
-            else
+            if (imageUrl.value.isNotEmpty())
                 imageUrl.value
+
+            else
+                        R.drawable.user
+
         )
         val launcher = rememberLauncherForActivityResult(
             contract = ActivityResultContracts.GetContent()
@@ -157,7 +159,7 @@ fun ProfileScreen(navController: NavController,vm: LCViewModel) {
                 )
             )
         }
-        
+
         Button(onClick = {
                          vm.logout()
             navigateTo(navController=navController, route = DestinationScreens.Login.route)

@@ -73,7 +73,7 @@ fun StatusScreen(navController: NavController, vm: LCViewModel) {
         val otherstatus = status.filter {
             it.user.userId != userData?.userId
         }
-        val launcher = rememberLauncherForActivityResult(contract = ActivityResultContracts.GetContent() ){
+        val launcher = rememberLauncherForActivityResult(contract = ActivityResultContracts.GetContent()){
             uri ->
             uri?.let {
                 vm.uploadStatus(uri)

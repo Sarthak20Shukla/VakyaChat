@@ -363,14 +363,16 @@ class LCViewModel @Inject constructor(
                 Filter.equalTo("user1.userId", userData.value?.userId),
                 Filter.equalTo("user2.userId", userData.value?.userId),
             )
-        ).addSnapshotListener { value, error ->
+        ).addSnapshotListener {
+                value, error ->
             if (error != null) {
                 handleException(error)
             }
             if (value != null) {
                 val currentConnections = arrayListOf(userData.value?.userId)
                 val chats = value.toObjects<ChatData>()
-                chats.forEach { chat ->
+                chats.forEach {
+                         chat ->
                     if (chat.user1.userId == userData.value?.userId) {
                         currentConnections.add(chat.user2.userId)
                     } else {
@@ -378,7 +380,7 @@ class LCViewModel @Inject constructor(
 
                     }
                 }
-                db.collection(STATUS).whereIn("user.userId", currentConnections)
+                db.collection(STATUS).whereGreaterThan("timestamp",cutoff).whereIn("user.userId", currentConnections)
                     .addSnapshotListener { value, error ->
 
                         if(error!=null){

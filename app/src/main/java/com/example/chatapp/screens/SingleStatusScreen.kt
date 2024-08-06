@@ -23,24 +23,49 @@ import androidx.navigation.NavController
 import com.example.chatapp.CommonImage
 import com.example.chatapp.LCViewModel
 
-enum class State {
-    INITIAL, ACTIVE, COMPLETE
+enum class ProgressIndicatorState {
+    INITIAL,
+    ACTIVE,
+    COMPLETED
+}
+
+@Composable
+fun CustomProgressIndicator(
+    modifier: Modifier,
+    state: ProgressIndicatorState,
+    onComplete: () -> Unit
+) {
+    var progress = if (state == ProgressIndicatorState.INITIAL) 0f else 1f
+    if (state == ProgressIndicatorState.ACTIVE) {
+        val toggleState = remember { mutableStateOf(false) }
+        LaunchedEffect(toggleState) {
+            toggleState.value = true
+        }
+        val p: Float by animateFloatAsState(
+            if (toggleState.value) 1f else 0f,
+            animationSpec = tween(5000),
+            finishedListener = {
+                onComplete.invoke()
+            }
+        )
+        progress = p
+    }
+
+    LinearProgressIndicator(
+        progress = progress,
+        modifier = modifier,
+        color = Color.Red
+    )
 }
 
 @Composable
 fun SingleStatusScreen(navController: NavController, vm: LCViewModel, userId: String) {
-    val statuses = vm.status.value.filter {
-        it.user.userId == userId
-    }
+    val statuses = vm.status.value.filter { it.user?.userId == userId }
     if (statuses.isNotEmpty()) {
-        val currentStatus = remember {
-            mutableStateOf(0)
-        }
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(Color.Black)
-        ) {
+        val currentStatus = remember { mutableStateOf(0) }
+
+
+        Box(modifier = Modifier.fillMaxSize().background(Color.Black)) {
             CommonImage(
                 data = statuses[currentStatus.value].imageUrl,
                 modifier = Modifier.fillMaxSize(),
@@ -53,35 +78,21 @@ fun SingleStatusScreen(navController: NavController, vm: LCViewModel, userId: St
                             .weight(1f)
                             .height(7.dp)
                             .padding(1.dp),
-                        state = if (currentStatus.value < index) State.INITIAL else if (currentStatus.value == index) State.ACTIVE else State.COMPLETE
+                        state = if (currentStatus.value < index)
+                            ProgressIndicatorState.INITIAL
+                        else if (currentStatus.value == index)
+                            ProgressIndicatorState.ACTIVE
+                        else
+                            ProgressIndicatorState.COMPLETED
                     ) {
-                        if(currentStatus.value<statuses.size-1)  currentStatus.value ++ else navController.popBackStack()
+                        if (currentStatus.value < statuses.size - 1)
+                            currentStatus.value++
+                        else
+                            navController.popBackStack()
                     }
                 }
             }
-
         }
     }
 }
 
-@Composable
-fun CustomProgressIndicator(modifier: Modifier, state: State, onComplete: () -> Unit) {
-
-    var progress = if (state == State.INITIAL) 0f else 1f
-    if (state == State.ACTIVE) {
-        val toggleState = remember {
-            mutableStateOf(false)
-        }
-        LaunchedEffect(toggleState) {
-            toggleState.value = true
-        }
-        val p: Float by animateFloatAsState(
-            if (toggleState.value) 1f else 0f,
-            animationSpec = tween(5000),
-            finishedListener = {
-                onComplete.invoke()
-            })
-        progress = p
-    }
-    LinearProgressIndicator(modifier = modifier, color = Color.Red, progress = progress)
-}
