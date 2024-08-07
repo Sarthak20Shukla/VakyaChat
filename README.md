@@ -13,7 +13,7 @@ This is an Android chat app built using Jetpack Compose and Kotlin. The app allo
 * User authentication and authorization
 * Chat rooms and direct messaging
 * File sharing and image upload
-* Status Update and View
+* Status Update and Display
 
 **Architecture**
 --------------
@@ -49,7 +49,7 @@ The app is built using the MVVM architecture:
 -------------
 <img src = "https://github.com/user-attachments/assets/76305a95-9242-4cd7-bad1-8c9baad28bb6" width="150" height="280" hspace="15">     
 <img src = "https://github.com/user-attachments/assets/422b1a53-0516-4463-bd05-a09f1bcc6f49" width="150" height="280" hspace="15">   
-<img src = "https://github.com/user-attachments/assets/1e8b7953-b873-4b3d-9b70-c386b20b9524" width="150" height="280"> </br>
+<img src = "https://github.com/user-attachments/assets/1e8b7953-b873-4b3d-9b70-c386b20b9524" width="150" height="280" hspace="15"> </br>
  </br>
 
 
@@ -60,7 +60,7 @@ The app is built using the MVVM architecture:
  </br>
  </br>
 
-<img src = "https://github.com/user-attachments/assets/121b479b-eee5-4af8-b520-0b41c7fd7a23" width="150" height="280">
+<img src = "https://github.com/user-attachments/assets/121b479b-eee5-4af8-b520-0b41c7fd7a23" width="150" height="280" hspace="15">
 <img src = "https://github.com/user-attachments/assets/f15939b3-c75a-4406-940f-7a7826e08fe2" width="150" height="280" hspace="15">   </br>
 
 
